@@ -13,7 +13,7 @@ export async function GET(
     const { courseId, sessionId } = await params;
 
     if (!sessionId || !courseId) {
-      return NextResponse.json({ error: "No not found" }, { status: 400 });
+      return NextResponse.json({ error: "Not found" }, { status: 400 });
     }
 
     const session = await Session.find({ _id: sessionId });
