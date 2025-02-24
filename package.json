@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "npx scripts/dbseed.ts"
   },
   "dependencies": {
     "mongoose": "^8.10.1",
