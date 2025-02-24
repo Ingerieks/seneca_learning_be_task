@@ -1,3 +1,4 @@
+import { ICourse } from "./course";
 import { IUser } from "./user";
 
 export interface ISession {
@@ -5,6 +6,6 @@ export interface ISession {
   totalModulesStudied: Number;
   averageScore: Number;
   timeStudied: Number;
-  courseId: String;
+  courseId: ICourse;
   userId: IUser;
 }

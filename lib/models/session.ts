@@ -6,7 +6,7 @@ const SessionSchema: Schema<ISession> = new mongoose.Schema(
     totalModulesStudied: { type: Number, required: true },
     averageScore: { type: Number, required: true },
     timeStudied: { type: Number, required: true },
-    courseId: { type: String, required: true },
+    courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
