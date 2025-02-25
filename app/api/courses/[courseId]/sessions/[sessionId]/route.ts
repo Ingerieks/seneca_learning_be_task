@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { Session } from "@/lib/models/session";
 import { ObjectId } from "mongoose";
 import mongoose from "mongoose";
+import { isValidObjectId } from "mongoose";
 
 export async function GET(
   req: Request,
@@ -11,16 +12,33 @@ export async function GET(
   try {
     await dbConnect();
     const { courseId, sessionId } = await params;
+    const userId = req.headers.get("userId");
 
-    if (!sessionId || !courseId) {
-      return NextResponse.json({ error: "Not found" }, { status: 400 });
+    if (!sessionId || !courseId || !userId) {
+      return NextResponse.json(
+        { error: "UserId or CourseId is missing" },
+        { status: 404 }
+      );
     }
 
-    const session = await Session.find({ _id: sessionId });
+    if (isValidObjectId(courseId) && isValidObjectId(userId)) {
+      const session = await Session.findOne({ sessionId: sessionId });
 
-    return NextResponse.json(session, { status: 201 });
+      if (!session) {
+        return NextResponse.json(
+          { error: "Session not found" },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json(session, { status: 201 });
+    } else {
+      return NextResponse.json(
+        { error: "UserId or CourseId is not a valid ObjectId" },
+        { status: 500 }
+      );
+    }
   } catch (error) {
-    console.error("Error creating session:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

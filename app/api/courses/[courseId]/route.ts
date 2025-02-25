@@ -3,6 +3,7 @@ import { Session } from "@/lib/models/session";
 import dbConnect from "@/lib/mongodb";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
+import { isValidObjectId } from "mongoose";
 
 export async function POST(
   req: Request,
@@ -12,22 +13,36 @@ export async function POST(
   const { courseId } = await params;
   const userId = req.headers.get("userId") as string;
 
-  const { totalModulesStudied, averageScore, timeStudied } = await req.json();
-  if (courseId && userId) {
-    const newSession = new Session({
-      totalModulesStudied,
-      averageScore,
-      timeStudied,
-      courseId: mongoose.Types.ObjectId.createFromHexString(courseId),
-      userId: mongoose.Types.ObjectId.createFromHexString(userId),
-    });
+  const { totalModulesStudied, averageScore, timeStudied, sessionId } =
+    await req.json();
 
-    const savedSession = await newSession.save();
+  if (
+    courseId &&
+    isValidObjectId(courseId) &&
+    userId &&
+    isValidObjectId(userId)
+  ) {
+    try {
+      const newSession = new Session({
+        sessionId,
+        totalModulesStudied,
+        averageScore,
+        timeStudied,
+        courseId: mongoose.Types.ObjectId.createFromHexString(courseId),
+        userId: mongoose.Types.ObjectId.createFromHexString(userId),
+      });
 
-    return Response.json(savedSession, { status: 201 });
+      const savedSession = await newSession.save();
+      return Response.json({ description: "Created" }, { status: 201 });
+    } catch {
+      return NextResponse.json(
+        { error: "This session id already exists" },
+        { status: 500 }
+      );
+    }
   } else {
     return NextResponse.json(
-      { error: "Missing course id or missin user id" },
+      { error: "UserId or CourseId is missing or is not a valid ObjectId" },
       { status: 500 }
     );
   }
@@ -43,27 +58,50 @@ export async function GET(
     const userId = req.headers.get("userId");
 
     if (!courseId || !userId) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "UserId or CourseId is missing" },
+        { status: 404 }
+      );
     }
 
-    const sessionStats = await Session.aggregate([
-      {
-        $match: {
-          courseId: mongoose.Types.ObjectId.createFromHexString(courseId),
-          userId: mongoose.Types.ObjectId.createFromHexString(userId),
+    if (isValidObjectId(courseId) && isValidObjectId(userId)) {
+      const sessionStats = await Session.aggregate([
+        {
+          $match: {
+            courseId: mongoose.Types.ObjectId.createFromHexString(courseId),
+            userId: mongoose.Types.ObjectId.createFromHexString(userId),
+          },
         },
-      },
-      {
-        $group: {
-          _id: "$courseId",
-          totalModulesStudied: { $sum: "$totalModulesStudied" },
-          averageScore: { $sum: "$averageScore" },
-          timeStudied: { $sum: "$totalModulesStudied" },
+        {
+          $group: {
+            _id: "$courseId",
+            totalModulesStudied: { $sum: "$totalModulesStudied" },
+            averageScore: { $avg: "$averageScore" },
+            timeStudied: { $sum: "$timeStudied" },
+          },
         },
-      },
-    ]);
+        {
+          $project: {
+            _id: 1,
+            totalModulesStudied: 1,
+            averageScore: { $round: ["$averageScore", 2] },
+            timeStudied: 1,
+          },
+        },
+      ]);
 
-    return NextResponse.json(sessionStats, { status: 201 });
+      return NextResponse.json(
+        {
+          content: sessionStats[0],
+        },
+        { status: 200 }
+      );
+    } else {
+      return NextResponse.json(
+        { error: "UserId or CourseId is not a valid ObjectId" },
+        { status: 500 }
+      );
+    }
   } catch (error) {
     console.error("Error creating session:", error);
     return NextResponse.json(
