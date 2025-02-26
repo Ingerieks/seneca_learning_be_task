@@ -31,7 +31,12 @@ export async function GET(
         );
       }
 
-      return NextResponse.json(session, { status: 201 });
+      return NextResponse.json(
+        {
+          content: session,
+        },
+        { status: 200 }
+      );
     } else {
       return NextResponse.json(
         { error: "UserId or CourseId is not a valid ObjectId" },

@@ -16,12 +16,14 @@ export async function POST(
   const { totalModulesStudied, averageScore, timeStudied, sessionId } =
     await req.json();
 
-  if (
-    courseId &&
-    isValidObjectId(courseId) &&
-    userId &&
-    isValidObjectId(userId)
-  ) {
+  if (!courseId || !userId) {
+    return NextResponse.json(
+      { error: "UserId or CourseId is missing" },
+      { status: 404 }
+    );
+  }
+
+  if (isValidObjectId(courseId) && isValidObjectId(userId)) {
     try {
       const newSession = new Session({
         sessionId,
@@ -42,7 +44,7 @@ export async function POST(
     }
   } else {
     return NextResponse.json(
-      { error: "UserId or CourseId is missing or is not a valid ObjectId" },
+      { error: "UserId or CourseId is not a valid ObjectId" },
       { status: 404 }
     );
   }
@@ -99,11 +101,10 @@ export async function GET(
     } else {
       return NextResponse.json(
         { error: "UserId or CourseId is not a valid ObjectId" },
-        { status: 500 }
+        { status: 404 }
       );
     }
   } catch (error) {
-    console.error("Error creating session:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
