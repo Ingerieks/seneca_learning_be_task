@@ -43,7 +43,7 @@ export async function POST(
   } else {
     return NextResponse.json(
       { error: "UserId or CourseId is missing or is not a valid ObjectId" },
-      { status: 500 }
+      { status: 404 }
     );
   }
 }
