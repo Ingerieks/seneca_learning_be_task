@@ -46,7 +46,7 @@ export async function GET(
       return NextResponse.json(session[0], { status: 200 });
     } else {
       return NextResponse.json(
-        { error: "User id or course id is not a valid ObjectId" },
+        { error: "user id or course id is not a valid ObjectId" },
         { status: 400 }
       );
     }

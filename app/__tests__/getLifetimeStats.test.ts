@@ -59,7 +59,7 @@ describe("GET /api/courses/[courseId]", () => {
         const json = await response.json();
         expect(response.status).toBe(404);
         expect(json).toStrictEqual({
-          error: "UserId or CourseId is missing",
+          error: "user id or course id is missing",
         });
       },
     });
@@ -82,7 +82,7 @@ describe("GET /api/courses/[courseId]", () => {
         const json = await response.json();
         expect(response.status).toBe(404);
         expect(json).toStrictEqual({
-          error: "UserId or CourseId is not a valid ObjectId",
+          error: "user id or course id is not a valid ObjectId",
         });
       },
     });

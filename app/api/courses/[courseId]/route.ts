@@ -17,7 +17,7 @@ export async function POST(
 
   if (!courseId || !userId) {
     return NextResponse.json(
-      { error: "UserId or CourseId is missing" },
+      { error: "user id or course id is missing" },
       { status: 404 }
     );
   }
@@ -44,7 +44,7 @@ export async function POST(
     }
   } else {
     return NextResponse.json(
-      { error: "UserId or CourseId is not a valid ObjectId" },
+      { error: "user id or course id is not a valid ObjectId" },
       { status: 404 }
     );
   }
@@ -61,7 +61,7 @@ export async function GET(
 
     if (!courseId || !userId) {
       return NextResponse.json(
-        { error: "UserId or CourseId is missing" },
+        { error: "user id or course id is missing" },
         { status: 404 }
       );
     }
@@ -102,7 +102,7 @@ export async function GET(
       }
     } else {
       return NextResponse.json(
-        { error: "UserId or CourseId is not a valid ObjectId" },
+        { error: "user id or course id is not a valid ObjectId" },
         { status: 404 }
       );
     }

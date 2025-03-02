@@ -82,7 +82,7 @@ describe("GET /api/courses/[courseId]/sessions/[sessionId]", () => {
         const json = await response.json();
         expect(response.status).toBe(400);
         expect(json).toStrictEqual({
-          error: "User id or course id is not a valid ObjectId",
+          error: "user id or course id is not a valid ObjectId",
         });
       },
     });
