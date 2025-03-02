@@ -6,13 +6,38 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+
+## Running the app in production
+
+1. Install the dependencies
+
+```bash
+npm install
+```
+
+2. Build app for production:
+
+```bash
+npm run build
+```
+
+3. Start app:
+
+```bash
+npm start
+```
+
+## Tests
+
+To run tests locally:
+
+```bash
+npm test
+```
+
+run script:
+MONGODB_URI=mongodb://localhost:27017/stats npx tsx scripts/dbseed.ts
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -34,3 +59,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+//npm install
+//npm run build - builds production bundle
+//npm run start - runs production bundle
+//npm test
+//docker & docker compose
+//
