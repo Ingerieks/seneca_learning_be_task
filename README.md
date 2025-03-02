@@ -12,6 +12,8 @@ npm run dev
 
 1. Install the dependencies
 
+Node version v22.12.0
+
 ```bash
 npm install
 ```
@@ -23,6 +25,8 @@ npm run build
 ```
 
 3. Start app:
+
+Set env variable: MONGODB_URI=<connection string> , for example: MONGODB_URI=mongodb://localhost:27017/stats
 
 ```bash
 npm start
