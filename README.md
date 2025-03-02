@@ -1,8 +1,20 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Assumptions
+
+course id that is used in the url and user id that is used in headers should both be valid mongo Object ids. Session id that is sent in the body can be any string, but needs to be unique
+
 ## Getting Started
 
-First, run the development server:
+First, to run the development server:
+
+Node version v22.12.0
+
+```bash
+npm install
+```
+
+Set env variable: MONGODB_URI=<connection string> , for example: MONGODB_URI=mongodb://localhost:27017/stats
 
 ```bash
 npm run dev
@@ -29,7 +41,7 @@ npm run build
 Set env variable: MONGODB_URI=<connection string> , for example: MONGODB_URI=mongodb://localhost:27017/stats
 
 ```bash
-npm start
+npm run start
 ```
 
 ## Tests
