@@ -1,30 +1,20 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
-interface MongooseCache {
-  conn: any | null;
-  promise: Promise<any> | null;
-}
-
-declare global {
-  var mongoose: MongooseCache | undefined;
-}
-
-const cached = global.mongoose || { conn: null, promise: null };
-global.mongoose = cached;
+let cached: mongoose.Mongoose | null = null;
 
 let mongoServer: MongoMemoryServer;
 
 async function dbConnect() {
-  if (cached.conn) {
-    return cached.conn;
+  if (cached) {
+    return cached;
   }
 
   if (process.env.NODE_ENV === "test") {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
 
-    cached.promise = mongoose.connect(uri, {});
+    cached = await mongoose.connect(uri, {});
   } else {
     const MONGODB_URI = process.env.MONGODB_URI as string;
 
@@ -32,11 +22,10 @@ async function dbConnect() {
       throw new Error("Please define the MONGODB_URI environment variable");
     }
 
-    cached.promise = mongoose.connect(MONGODB_URI, {});
+    cached = await mongoose.connect(MONGODB_URI, {});
   }
 
-  cached.conn = await cached.promise;
-  return cached.conn;
+  return cached;
 }
 
 export const closeDB = async () => {
