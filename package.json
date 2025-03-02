@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "npx scripts/dbseed.ts",
-    "test": "NODE_ENV=test jest"
+    "test": "NODE_ENV=test jest --detectOpenHandles"
   },
   "dependencies": {
     "mongoose": "^8.10.1",

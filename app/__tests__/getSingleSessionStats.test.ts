@@ -7,13 +7,13 @@ import { mockSession, courseId, userId } from "../testUtils";
 
 describe("GET /api/courses/[courseId]/sessions/[sessionId]", () => {
   afterAll(() => {
+    jest.restoreAllMocks();
     closeDB();
   });
 
   it("returns a session document with totalModulesStudied, averageScore, timeStudied and sessionId fields", async () => {
     await dbConnect();
 
-    mockSession;
     await mockSession.save();
 
     await testApiHandler({
@@ -57,7 +57,7 @@ describe("GET /api/courses/[courseId]/sessions/[sessionId]", () => {
 
         const json = await response.json();
         expect(response.status).toBe(404);
-        await expect(json).toStrictEqual({
+        expect(json).toStrictEqual({
           error: "user id, session id or course id is missing",
         });
       },
@@ -81,7 +81,7 @@ describe("GET /api/courses/[courseId]/sessions/[sessionId]", () => {
 
         const json = await response.json();
         expect(response.status).toBe(400);
-        await expect(json).toStrictEqual({
+        expect(json).toStrictEqual({
           error: "User id or course id is not a valid ObjectId",
         });
       },

@@ -12,26 +12,17 @@ import {
   userId,
 } from "../testUtils";
 
-const body = JSON.stringify({
-  sessionId: 543,
-  totalModulesStudied: 3,
-  averageScore: 67,
-  timeStudied: 1230,
-});
-
 describe("GET /api/courses/[courseId]", () => {
   afterAll(() => {
+    jest.restoreAllMocks();
     closeDB();
   });
 
   it("returns a session document with totalModulesStudied, averageScore and timeStudied fields", async () => {
     await dbConnect();
 
-    mockSession;
     await mockSession.save();
-    mockSession_b;
     await mockSession_b.save();
-    mockSession_c;
     await mockSession_c.save();
 
     await testApiHandler({
@@ -67,7 +58,7 @@ describe("GET /api/courses/[courseId]", () => {
 
         const json = await response.json();
         expect(response.status).toBe(404);
-        await expect(json).toStrictEqual({
+        expect(json).toStrictEqual({
           error: "UserId or CourseId is missing",
         });
       },
@@ -90,7 +81,7 @@ describe("GET /api/courses/[courseId]", () => {
 
         const json = await response.json();
         expect(response.status).toBe(404);
-        await expect(json).toStrictEqual({
+        expect(json).toStrictEqual({
           error: "UserId or CourseId is not a valid ObjectId",
         });
       },
