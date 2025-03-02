@@ -2,7 +2,7 @@ import { ICourse } from "./course";
 import { IUser } from "./user";
 
 export interface ISession {
-  sessionId: number;
+  sessionId: String;
   totalModulesStudied: Number;
   averageScore: Number;
   timeStudied: Number;

@@ -35,7 +35,7 @@ export async function POST(
       });
 
       const savedSession = await newSession.save();
-      return Response.json({ description: "Created" }, { status: 201 });
+      return Response.json("Created", { status: 201 });
     } catch {
       return NextResponse.json(
         { error: "This session id already exists" },
@@ -84,7 +84,7 @@ export async function GET(
         },
         {
           $project: {
-            _id: 1,
+            _id: 0,
             totalModulesStudied: 1,
             averageScore: { $round: ["$averageScore", 2] },
             timeStudied: 1,
@@ -92,12 +92,14 @@ export async function GET(
         },
       ]);
 
-      return NextResponse.json(
-        {
-          content: sessionStats[0],
-        },
-        { status: 200 }
-      );
+      if (sessionStats.length <= 0) {
+        return NextResponse.json(
+          { error: "Session not found" },
+          { status: 404 }
+        );
+      } else {
+        return NextResponse.json(sessionStats[0], { status: 200 });
+      }
     } else {
       return NextResponse.json(
         { error: "UserId or CourseId is not a valid ObjectId" },

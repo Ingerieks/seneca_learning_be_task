@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import { ISession } from "../interfaces/session";
 
 const SessionSchema: Schema<ISession> = new mongoose.Schema({
-  sessionId: { type: Number, unique: true, required: true },
+  sessionId: { type: String, unique: true, required: true },
   totalModulesStudied: { type: Number, required: true },
   averageScore: { type: Number, required: true },
   timeStudied: { type: Number, required: true },

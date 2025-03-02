@@ -1,8 +1,6 @@
 import dbConnect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import { Session } from "@/lib/models/session";
-import { ObjectId } from "mongoose";
-import mongoose from "mongoose";
 import { isValidObjectId } from "mongoose";
 
 export async function GET(
@@ -16,34 +14,43 @@ export async function GET(
 
     if (!sessionId || !courseId || !userId) {
       return NextResponse.json(
-        { error: "UserId or CourseId is missing" },
+        { error: "user id, session id or course id is missing" },
         { status: 404 }
       );
     }
 
     if (isValidObjectId(courseId) && isValidObjectId(userId)) {
-      const session = await Session.findOne({ sessionId: sessionId });
-
-      if (!session) {
+      const session = await Session.aggregate([
+        {
+          $match: {
+            sessionId: sessionId,
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            sessionId: 1,
+            totalModulesStudied: 1,
+            averageScore: 1,
+            timeStudied: 1,
+          },
+        },
+      ]);
+      if (session.length <= 0) {
         return NextResponse.json(
           { error: "Session not found" },
           { status: 404 }
         );
       }
-
-      return NextResponse.json(
-        {
-          content: session,
-        },
-        { status: 200 }
-      );
+      return NextResponse.json(session[0], { status: 200 });
     } else {
       return NextResponse.json(
-        { error: "UserId or CourseId is not a valid ObjectId" },
-        { status: 500 }
+        { error: "User id or course id is not a valid ObjectId" },
+        { status: 400 }
       );
     }
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
