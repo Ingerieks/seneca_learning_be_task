@@ -2,7 +2,6 @@ import { testApiHandler } from "next-test-api-route-handler"; // Must always be 
 import "@testing-library/jest-dom";
 import * as appHandler from "../api/courses/[courseId]/route";
 import dbConnect from "@/lib/mongodb";
-import { Session } from "@/lib/models/session";
 import { closeDB } from "@/lib/mongodb";
 import {
   mockSession,
@@ -50,9 +49,7 @@ describe("GET /api/courses/[courseId]", () => {
 
         const json = await response.json();
         expect(response.status).toBe(200);
-        expect(json).toStrictEqual({
-          content: lifetimeStats,
-        });
+        expect(json).toStrictEqual(lifetimeStats);
       },
     });
   });
@@ -66,9 +63,6 @@ describe("GET /api/courses/[courseId]", () => {
       test: async ({ fetch }) => {
         const response = await fetch({
           method: "GET",
-          headers: {
-            userId: "",
-          },
         });
 
         const json = await response.json();

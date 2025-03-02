@@ -1,16 +1,8 @@
 import { testApiHandler } from "next-test-api-route-handler"; // Must always be first
 import "@testing-library/jest-dom";
 import * as appHandler from "../api/courses/[courseId]/route";
-import dbConnect from "@/lib/mongodb";
-import { Session } from "@/lib/models/session";
 import { closeDB } from "@/lib/mongodb";
-import {
-  mockSession,
-  reqBody,
-  courseId,
-  userId,
-  mockDuplicateSession,
-} from "../testUtils";
+import { reqBody, courseId, userId } from "../testUtils";
 
 describe("POST /api/courses/[courseId]", () => {
   afterAll(() => {
@@ -33,9 +25,7 @@ describe("POST /api/courses/[courseId]", () => {
         });
         const json = await response.json();
         expect(response.status).toBe(201);
-        await expect(json).toStrictEqual({
-          description: "Created",
-        });
+        await expect(json).toStrictEqual("Created");
       },
     });
   });
@@ -72,9 +62,6 @@ describe("POST /api/courses/[courseId]", () => {
       test: async ({ fetch }) => {
         const response = await fetch({
           method: "POST",
-          headers: {
-            userId: "",
-          },
           body: reqBody,
         });
         const json = await response.json();
