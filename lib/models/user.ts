@@ -1,5 +1,4 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
-import { ISession } from "../interfaces/session";
+import mongoose, { Schema, Model } from "mongoose";
 import { IUser } from "../interfaces/user";
 
 const UserSchema: Schema<IUser> = new mongoose.Schema({

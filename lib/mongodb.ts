@@ -1,6 +1,5 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import { Connection } from "mongoose";
 
 interface MongooseCache {
   conn: any | null;
@@ -11,7 +10,7 @@ declare global {
   var mongoose: MongooseCache | undefined;
 }
 
-let cached = global.mongoose || { conn: null, promise: null };
+const cached = global.mongoose || { conn: null, promise: null };
 global.mongoose = cached;
 
 let mongoServer: MongoMemoryServer;
@@ -41,9 +40,7 @@ async function dbConnect() {
 }
 
 export const closeDB = async () => {
-  await mongoose.connection.dropDatabase();
   await mongoose.connection.close();
-  await mongoServer.stop();
 };
 
 export default dbConnect;

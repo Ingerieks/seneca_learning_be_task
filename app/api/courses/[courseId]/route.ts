@@ -1,4 +1,3 @@
-import { ISession } from "@/lib/interfaces/session";
 import { Session } from "@/lib/models/session";
 import dbConnect from "@/lib/mongodb";
 import mongoose from "mongoose";
@@ -7,10 +6,10 @@ import { isValidObjectId } from "mongoose";
 
 export async function POST(
   req: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   await dbConnect();
-  const { courseId } = await params;
+  const courseId = (await params).courseId;
   const userId = req.headers.get("userId") as string;
 
   const { totalModulesStudied, averageScore, timeStudied, sessionId } =
@@ -34,9 +33,10 @@ export async function POST(
         userId: mongoose.Types.ObjectId.createFromHexString(userId),
       });
 
-      const savedSession = await newSession.save();
+      await newSession.save();
       return Response.json("Created", { status: 201 });
-    } catch {
+    } catch (error) {
+      console.log(error, "error");
       return NextResponse.json(
         { error: "This session id already exists" },
         { status: 500 }
@@ -52,11 +52,11 @@ export async function POST(
 
 export async function GET(
   req: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
     await dbConnect();
-    const { courseId } = await params;
+    const courseId = (await params).courseId;
     const userId = req.headers.get("userId");
 
     if (!courseId || !userId) {
@@ -107,6 +107,7 @@ export async function GET(
       );
     }
   } catch (error) {
+    console.log(error, "error");
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

@@ -1,9 +1,9 @@
 export interface ICourse {
-  title: String;
-  price: String;
-  ageGroup: String;
-  subject: String;
-  examBoard: String;
-  type: String;
-  tier: String;
+  title: string;
+  price: string;
+  ageGroup: string;
+  subject: string;
+  examBoard: string;
+  type: string;
+  tier: string;
 }

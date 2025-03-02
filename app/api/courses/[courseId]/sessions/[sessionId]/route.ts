@@ -5,11 +5,12 @@ import { isValidObjectId } from "mongoose";
 
 export async function GET(
   req: Request,
-  { params }: { params: { sessionId: String; courseId: String } }
+  { params }: { params: Promise<{ sessionId: string; courseId: string }> }
 ) {
   try {
     await dbConnect();
-    const { courseId, sessionId } = await params;
+    const sessionId = (await params).sessionId;
+    const courseId = (await params).courseId;
     const userId = req.headers.get("userId");
 
     if (!sessionId || !courseId || !userId) {
