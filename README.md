@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Assumptions
 
-course id that is used in the url and user id that is used in headers should both be valid mongo Object ids. Session id that is sent in the body can be any string, but needs to be unique
+course id that is used in the url and user id that is used in headers should both be valid mongo Object ids, for example 507f1f77bcf86cd799439045 or 507f191e810c19729de860ea. Session id that is sent in the body can be any string, but needs to be unique
 
 ## Getting Started
 
@@ -51,9 +51,6 @@ To run tests locally:
 ```bash
 npm test
 ```
-
-run script:
-MONGODB_URI=mongodb://localhost:27017/stats npx tsx scripts/dbseed.ts
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
