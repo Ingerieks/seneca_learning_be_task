@@ -70,8 +70,8 @@ export async function GET(
       const sessionStats = await Session.aggregate([
         {
           $match: {
-            courseId: mongoose.Types.ObjectId.createFromHexString(courseId),
-            userId: mongoose.Types.ObjectId.createFromHexString(userId),
+            courseId: new mongoose.Types.ObjectId(courseId),
+            userId: new mongoose.Types.ObjectId(userId),
           },
         },
         {
